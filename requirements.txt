@@ -1,4 +1,6 @@
-fastapi
-uvicorn
-telethon
-python-multipart
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+telethon==1.36.0
+pydantic==2.9.2
+python-multipart==0.0.12
+aiogram==3.13.1
