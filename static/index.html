@@ -23,6 +23,7 @@
     --g-cosmos: linear-gradient(135deg, #4f7fff, #a855f7 50%, #ec4899);
     --g-mint: linear-gradient(135deg, #10b981, #06b6d4);
     --g-fire: linear-gradient(135deg, #f43f5e, #f59e0b);
+    --g-violet: linear-gradient(135deg, #a855f7, #4f7fff);
     --g-text-bright: linear-gradient(135deg, #60a5fa, #a78bfa 50%, #f472b6);
     --t-100: #f5f7ff;
     --t-200: #d4daf5;
@@ -41,10 +42,8 @@
 html, body { overscroll-behavior: none; }
 body {
     font-family: 'Manrope', -apple-system, sans-serif;
-    background: var(--bg-void);
-    color: var(--t-100);
-    min-height: 100vh;
-    overflow-x: hidden;
+    background: var(--bg-void); color: var(--t-100);
+    min-height: 100vh; overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
 .cosmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -58,6 +57,15 @@ body {
     filter: blur(60px);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.stars { position: absolute; inset: 0; }
+.star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+    0%,100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 8px white; }
+}
 
 #app { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; z-index: 1; }
 
@@ -107,8 +115,16 @@ body {
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 20px 60px rgba(79,127,255,0.5);
     animation: float 4s ease-in-out infinite;
+    position: relative;
+}
+.hero-logo::before {
+    content: ''; position: absolute; inset: -10px;
+    border-radius: 32px; background: var(--g-cosmos);
+    opacity: 0.5; filter: blur(20px); z-index: -1;
+    animation: glow 4s ease-in-out infinite;
 }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes glow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.15); } }
 .hero-logo svg { width: 48px; height: 48px; color: white; }
 .hero h1 {
     font-family: 'Space Grotesk', sans-serif;
@@ -167,13 +183,6 @@ body {
     background: var(--g-cosmos); color: white;
     box-shadow: 0 8px 32px rgba(79,127,255,0.35);
 }
-.btn-success { background: var(--g-mint); color: white; }
-.btn-danger { background: var(--g-fire); color: white; }
-.btn-secondary {
-    background: var(--bg-glass);
-    color: var(--t-100);
-    border: 1px solid var(--b-1);
-}
 
 .code-input {
     text-align: center !important;
@@ -199,7 +208,6 @@ body {
 }
 .note svg { width: 18px; height: 18px; color: var(--neon-blue); flex-shrink: 0; margin-top: 1px; }
 
-/* Cards */
 .card {
     background: var(--bg-card);
     backdrop-filter: blur(20px);
@@ -215,6 +223,7 @@ body {
     top: 0; left: 0; right: 0; height: 3px;
     background: var(--g-cosmos);
 }
+.card.user::before { background: var(--g-violet); }
 .card-row {
     display: flex; align-items: center; gap: 12px;
     margin-bottom: 12px;
@@ -228,6 +237,7 @@ body {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 16px; flex-shrink: 0;
 }
+.card.user .card-avatar { background: var(--g-violet); }
 .card-info { flex: 1; min-width: 0; }
 .card-title { font-weight: 800; font-size: 15px; }
 .card-meta { font-size: 12px; color: var(--t-300); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
@@ -242,15 +252,13 @@ body {
 }
 .chip-success { color: var(--neon-green); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
 .chip-info { color: var(--neon-blue); border-color: rgba(79,127,255,0.3); background: rgba(79,127,255,0.08); }
+.chip-admin { color: var(--neon-amber); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
 .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn-sm {
     padding: 8px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
+    font-size: 12px; font-weight: 700;
+    border-radius: 10px; border: none;
+    cursor: pointer; font-family: inherit;
     display: inline-flex; align-items: center; gap: 5px;
     transition: transform 0.2s;
 }
@@ -259,7 +267,6 @@ body {
 .btn-sm.green { background: rgba(16,185,129,0.12); color: var(--neon-green); border: 1px solid rgba(16,185,129,0.25); }
 .btn-sm.purple { background: rgba(168,85,247,0.12); color: var(--neon-purple); border: 1px solid rgba(168,85,247,0.25); }
 
-/* Menu */
 .menu-btn {
     display: flex; align-items: center;
     width: 100%; padding: 18px;
@@ -288,7 +295,6 @@ body {
 .menu-title { font-size: 15px; font-weight: 700; }
 .menu-sub { font-size: 12px; color: var(--t-300); margin-top: 4px; }
 
-/* Welcome */
 .welcome { padding: 24px 18px 12px; }
 .welcome-hi {
     font-size: 13px; color: var(--t-300);
@@ -308,8 +314,20 @@ body {
     background: var(--g-text-bright);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
+.welcome-badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--g-cosmos);
+    color: white;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    vertical-align: middle;
+    font-family: 'Space Grotesk', sans-serif;
+}
 
-/* Stats */
 .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 18px; margin-bottom: 24px; }
 .stat {
     background: var(--bg-card);
@@ -351,10 +369,8 @@ body {
 }
 .empty-icon svg { width: 32px; height: 32px; color: var(--t-400); }
 
-/* Progress */
 .progress-bar {
-    width: 100%;
-    height: 8px;
+    width: 100%; height: 8px;
     background: rgba(255,255,255,0.05);
     border-radius: 10px;
     overflow: hidden;
@@ -372,10 +388,7 @@ body {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600;
 }
-.progress-text strong {
-    color: var(--t-100);
-    font-size: 14px;
-}
+.progress-text strong { color: var(--t-100); font-size: 14px; }
 
 .status-badge {
     font-size: 10px;
@@ -394,7 +407,6 @@ body {
 .s-stopped { background: rgba(244,63,94,0.1); color: var(--neon-rose); border: 1px solid rgba(244,63,94,0.25); }
 .s-finished { background: rgba(79,127,255,0.1); color: var(--neon-blue); border: 1px solid rgba(79,127,255,0.25); }
 
-/* Toast */
 .toast {
     position: fixed; bottom: 30px;
     left: 50%; transform: translateX(-50%) translateY(120px);
@@ -431,11 +443,14 @@ body {
 </head>
 <body>
 
-<div class="cosmos"><div class="aurora"></div></div>
+<div class="cosmos">
+    <div class="aurora"></div>
+    <div class="stars" id="stars"></div>
+</div>
 
 <div id="app">
 
-<!-- LOGIN APP -->
+<!-- LOGIN -->
 <div id="page-login" class="page active">
     <div class="center-content">
         <div class="hero">
@@ -447,13 +462,13 @@ body {
         </div>
         <div class="field">
             <label>Логин</label>
-            <input type="text" id="li-user" placeholder="admin" autocomplete="username">
+            <input type="text" id="li-user" placeholder="Введите логин" autocomplete="username">
         </div>
         <div class="field">
             <label>Пароль</label>
-            <input type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password">
+            <input type="password" id="li-pass" placeholder="Введите пароль" autocomplete="current-password">
         </div>
-        <button class="btn btn-primary" onclick="doLogin()">Войти</button>
+        <button class="btn btn-primary" id="li-btn" onclick="doLogin()">Войти в систему</button>
         <div id="li-msg" class="msg"></div>
     </div>
 </div>
@@ -468,7 +483,10 @@ body {
     </div>
     <div class="welcome">
         <div class="welcome-hi">Online</div>
-        <div class="welcome-name">Панель управления</div>
+        <div>
+            <span class="welcome-name" id="welcome-name">Пользователь</span>
+            <span class="welcome-badge" id="welcome-badge">USER</span>
+        </div>
     </div>
     <div class="stats">
         <div class="stat"><div class="stat-num" id="s-acc">0</div><div class="stat-label">Аккаунтов</div></div>
@@ -495,6 +513,13 @@ body {
             <div class="menu-info">
                 <div class="menu-title">Мои рассылки</div>
                 <div class="menu-sub">Управление кампаниями</div>
+            </div>
+        </button>
+        <button class="menu-btn" id="btn-users" style="display:none" onclick="goTo('page-users')">
+            <div class="menu-icon" style="background: var(--g-violet)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+            <div class="menu-info">
+                <div class="menu-title">Пользователи</div>
+                <div class="menu-sub">Управление доступом</div>
             </div>
         </button>
     </div>
@@ -533,7 +558,7 @@ body {
     </div>
 </div>
 
-<!-- VERIFY CODE -->
+<!-- VERIFY -->
 <div id="page-verify" class="page">
     <div class="top-bar">
         <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -543,7 +568,7 @@ body {
     <div class="page-content">
         <div class="note" id="vf-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            <span>Код отправлен в Telegram на <b id="vf-phone"></b></span>
+            <span>Код отправлен на <b id="vf-phone"></b></span>
         </div>
         <div class="field">
             <label>Код подтверждения</label>
@@ -558,19 +583,17 @@ body {
     </div>
 </div>
 
-<!-- ACCOUNTS LIST -->
+<!-- ACCOUNTS -->
 <div id="page-accounts" class="page">
     <div class="top-bar">
         <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg></button>
         <span class="top-title">Мои аккаунты</span>
         <div style="width:40px"></div>
     </div>
-    <div class="page-content">
-        <div id="acc-list"></div>
-    </div>
+    <div class="page-content"><div id="acc-list"></div></div>
 </div>
 
-<!-- MAILINGS LIST -->
+<!-- MAILINGS -->
 <div id="page-mailings" class="page">
     <div class="top-bar">
         <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -586,7 +609,7 @@ body {
     </div>
 </div>
 
-<!-- CREATE MAILING -->
+<!-- CREATE -->
 <div id="page-create" class="page">
     <div class="top-bar">
         <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -610,14 +633,44 @@ body {
         </div>
         <div class="field">
             <label>Текст сообщения</label>
-            <textarea id="cm-text" rows="5" placeholder="Текст, который будет отправлен во все супергруппы"></textarea>
+            <textarea id="cm-text" rows="5" placeholder="Текст для отправки во все супергруппы"></textarea>
         </div>
         <div class="field">
-            <label>Задержка между сообщениями (секунды)</label>
+            <label>Задержка между сообщениями (сек)</label>
             <input type="number" id="cm-delay" value="60" min="3">
         </div>
         <button class="btn btn-primary" id="cm-btn" onclick="createMailing()">Создать рассылку</button>
         <div id="cm-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- USERS (ADMIN) -->
+<div id="page-users" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Пользователи</span>
+        <div style="width:40px"></div>
+    </div>
+    <div class="page-content">
+        <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Создавайте пользователей и выдавайте им доступ к системе</span>
+        </div>
+        <div class="field">
+            <label>Логин</label>
+            <input type="text" id="nu-name" placeholder="Логин нового пользователя">
+        </div>
+        <div class="field">
+            <label>Пароль</label>
+            <input type="text" id="nu-pass" placeholder="Пароль (мин. 4 символа)">
+        </div>
+        <button class="btn btn-primary" id="nu-btn" onclick="createUser()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Создать пользователя
+        </button>
+        <div id="nu-msg" class="msg"></div>
+        <div class="section-title" style="margin-left:0;margin-right:0">Список пользователей</div>
+        <div id="users-list"></div>
     </div>
 </div>
 
@@ -629,57 +682,74 @@ body {
 // API
 // ═══════════════════════════════════════════════
 const API = '/api';
+let TOKEN = localStorage.getItem('nebula_token') || null;
+let CURRENT_USER = null;
+let PAGE_STACK = [];
+let PENDING_PHONE = null;
+let MAILING_POLL_INTERVAL = null;
 
 async function api(path, method='GET', body=null) {
-    const opts = { method, headers: {'Content-Type':'application/json'} };
+    const opts = {
+        method,
+        headers: {'Content-Type':'application/json'}
+    };
+    if (TOKEN) opts.headers['Authorization'] = 'Bearer ' + TOKEN;
     if (body) opts.body = JSON.stringify(body);
     const r = await fetch(API + path, opts);
     let data;
     try { data = await r.json(); } catch { data = {}; }
-    if (!r.ok) throw new Error(data.detail || 'Ошибка сервера');
+    if (!r.ok) {
+        if (r.status === 401) {
+            TOKEN = null;
+            localStorage.removeItem('nebula_token');
+            showPage('page-login');
+        }
+        throw new Error(data.detail || 'Ошибка сервера');
+    }
     return data;
 }
 
 // ═══════════════════════════════════════════════
-// Локальная авторизация в приложение
+// STARS
 // ═══════════════════════════════════════════════
-const LOGIN_USER = 'admin';
-const LOGIN_PASS = 'admin123';
-let PAGE_STACK = [];
-let PENDING_PHONE = null;
-let PENDING_ACCOUNT_DATA = null;
-let MAILING_POLL_INTERVAL = null;
-
-function doLogin() {
-    const u = document.getElementById('li-user').value.trim();
-    const p = document.getElementById('li-pass').value.trim();
-    if (u === LOGIN_USER && p === LOGIN_PASS) {
-        localStorage.setItem('nebula_auth', '1');
-        document.getElementById('li-msg').textContent = '';
-        openMain();
-    } else {
-        setMsg('li-msg', 'Неверный логин или пароль', 'error');
+function generateStars() {
+    const stars = document.getElementById('stars');
+    for (let i = 0; i < 40; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const sz = Math.random() * 2 + 1;
+        s.style.width = sz + 'px';
+        s.style.height = sz + 'px';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.animationDelay = Math.random() * 3 + 's';
+        stars.appendChild(s);
     }
 }
-function logout() {
-    localStorage.removeItem('nebula_auth');
-    PAGE_STACK = [];
-    showPage('page-login');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('nebula_auth') === '1') openMain();
-    document.getElementById('li-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-});
-
-async function openMain() {
-    PAGE_STACK = [];
-    showPage('page-main');
-    await refreshStats();
-}
 
 // ═══════════════════════════════════════════════
-// Навигация
+// INIT
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+    generateStars();
+    if (TOKEN) {
+        try {
+            const r = await api('/me');
+            CURRENT_USER = r.user;
+            openMain();
+            return;
+        } catch {
+            TOKEN = null;
+            localStorage.removeItem('nebula_token');
+        }
+    }
+    showPage('page-login');
+    document.getElementById('li-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('li-user').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('li-pass').focus(); });
+});
+
+// ═══════════════════════════════════════════════
+// NAV
 // ═══════════════════════════════════════════════
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -693,21 +763,23 @@ function goTo(id) {
     showPage(id);
     if (id === 'page-accounts') loadAccounts();
     if (id === 'page-mailings') loadMailings();
+    if (id === 'page-users') loadUsers();
     if (id === 'page-main') refreshStats();
 }
 
 function goBack() {
     stopMailingPolling();
-    if (!PAGE_STACK.length) { showPage('page-main'); return; }
+    if (!PAGE_STACK.length) { showPage('page-main'); refreshStats(); return; }
     const p = PAGE_STACK.pop();
     showPage(p);
     if (p === 'page-accounts') loadAccounts();
     if (p === 'page-mailings') loadMailings();
+    if (p === 'page-users') loadUsers();
     if (p === 'page-main') refreshStats();
 }
 
 // ═══════════════════════════════════════════════
-// Utils
+// UTILS
 // ═══════════════════════════════════════════════
 function toast(msg, type='success') {
     const t = document.getElementById('toast');
@@ -734,8 +806,48 @@ function setLoading(btnId, loading, text='') {
 function esc(s) { const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 
 // ═══════════════════════════════════════════════
-// Stats
+// LOGIN/LOGOUT
 // ═══════════════════════════════════════════════
+async function doLogin() {
+    const u = document.getElementById('li-user').value.trim();
+    const p = document.getElementById('li-pass').value.trim();
+    if (!u || !p) { setMsg('li-msg', 'Заполните все поля', 'error'); return; }
+
+    setLoading('li-btn', true, 'Вход...');
+    setMsg('li-msg', '', '');
+    try {
+        const r = await api('/login', 'POST', { username: u, password: p });
+        TOKEN = r.token;
+        CURRENT_USER = r.user;
+        localStorage.setItem('nebula_token', TOKEN);
+        openMain();
+    } catch (e) {
+        setMsg('li-msg', e.message, 'error');
+    } finally {
+        setLoading('li-btn', false);
+    }
+}
+
+async function logout() {
+    try { await api('/logout', 'POST'); } catch {}
+    TOKEN = null;
+    CURRENT_USER = null;
+    localStorage.removeItem('nebula_token');
+    PAGE_STACK = [];
+    document.getElementById('li-user').value = '';
+    document.getElementById('li-pass').value = '';
+    showPage('page-login');
+}
+
+async function openMain() {
+    PAGE_STACK = [];
+    document.getElementById('welcome-name').textContent = CURRENT_USER.username;
+    document.getElementById('welcome-badge').textContent = CURRENT_USER.is_admin ? 'ADMIN' : 'USER';
+    document.getElementById('btn-users').style.display = CURRENT_USER.is_admin ? 'flex' : 'none';
+    showPage('page-main');
+    await refreshStats();
+}
+
 async function refreshStats() {
     try {
         const a = await api('/accounts');
@@ -746,7 +858,80 @@ async function refreshStats() {
 }
 
 // ═══════════════════════════════════════════════
-// Добавление аккаунта — отправка кода
+// USERS (ADMIN)
+// ═══════════════════════════════════════════════
+async function loadUsers() {
+    const list = document.getElementById('users-list');
+    list.innerHTML = '<div class="empty"><div class="spinner" style="width:24px;height:24px;border-color:rgba(255,255,255,0.2);border-top-color:#4f7fff"></div></div>';
+    try {
+        const r = await api('/users');
+        if (!r.users.length) {
+            list.innerHTML = '<div class="empty">Нет пользователей</div>';
+            return;
+        }
+        list.innerHTML = '';
+        r.users.forEach(u => {
+            const initial = u.username.charAt(0).toUpperCase();
+            const card = document.createElement('div');
+            card.className = 'card user';
+            const isCurrent = u.id === CURRENT_USER.id;
+            card.innerHTML = `
+                <div class="card-row">
+                    <div class="card-avatar">${esc(initial)}</div>
+                    <div class="card-info">
+                        <div class="card-title">${esc(u.username)}</div>
+                        <div class="card-meta">ID: ${u.id}</div>
+                    </div>
+                </div>
+                <div class="card-chips">
+                    ${u.is_admin ? '<span class="chip chip-admin">👑 Администратор</span>' : '<span class="chip chip-info">Пользователь</span>'}
+                    ${isCurrent ? '<span class="chip chip-success">✓ Это вы</span>' : ''}
+                </div>
+                ${!u.is_admin && !isCurrent ? `
+                <div class="card-actions">
+                    <button class="btn-sm red" onclick="deleteUser(${u.id}, '${esc(u.username)}')">🗑 Удалить</button>
+                </div>` : ''}
+            `;
+            list.appendChild(card);
+        });
+    } catch (e) {
+        list.innerHTML = `<div class="empty" style="color:var(--neon-rose)">${esc(e.message)}</div>`;
+    }
+}
+
+async function createUser() {
+    const name = document.getElementById('nu-name').value.trim();
+    const pass = document.getElementById('nu-pass').value.trim();
+    if (!name || !pass) { setMsg('nu-msg', 'Заполните все поля', 'error'); return; }
+
+    setLoading('nu-btn', true, 'Создание...');
+    setMsg('nu-msg', '', '');
+    try {
+        await api('/users', 'POST', { username: name, password: pass });
+        toast('Пользователь создан!', 'success');
+        document.getElementById('nu-name').value = '';
+        document.getElementById('nu-pass').value = '';
+        loadUsers();
+    } catch (e) {
+        setMsg('nu-msg', e.message, 'error');
+    } finally {
+        setLoading('nu-btn', false);
+    }
+}
+
+async function deleteUser(id, name) {
+    if (!confirm(`Удалить пользователя "${name}"?`)) return;
+    try {
+        await api(`/users/${id}`, 'DELETE');
+        toast('Пользователь удалён', 'success');
+        loadUsers();
+    } catch (e) {
+        toast(e.message, 'error');
+    }
+}
+
+// ═══════════════════════════════════════════════
+// SEND CODE
 // ═══════════════════════════════════════════════
 async function sendCode() {
     const phone = document.getElementById('aa-phone').value.trim();
@@ -758,13 +943,11 @@ async function sendCode() {
         setMsg('aa-msg', 'Заполните телефон, API ID и API Hash', 'error');
         return;
     }
-
     let formatted = phone;
     if (!formatted.startsWith('+')) formatted = '+' + formatted.replace(/\D/g, '');
 
     setLoading('aa-btn', true, 'Отправка кода...');
     setMsg('aa-msg', '', '');
-
     try {
         const res = await api('/send-code', 'POST', {
             phone: formatted,
@@ -772,23 +955,18 @@ async function sendCode() {
             api_hash: apiHash,
             proxy: proxy || null
         });
-
         PENDING_PHONE = formatted;
         toast('Код отправлен!', 'success');
-
         document.getElementById('vf-phone').textContent = formatted;
         document.getElementById('vf-code').value = '';
         document.getElementById('vf-2fa').value = '';
         setMsg('vf-msg', '', '');
-
         const typeMap = {
-            'SentCodeTypeApp': 'Код в приложении Telegram',
-            'SentCodeTypeSms': 'Код отправлен по SMS',
+            'SentCodeTypeApp': 'Код в Telegram',
+            'SentCodeTypeSms': 'Код по SMS',
             'SentCodeTypeCall': 'Код в звонке'
         };
-        const noteText = typeMap[res.type] || 'Код отправлен';
-        document.querySelector('#vf-note span').innerHTML = `${noteText} на <b>${formatted}</b>`;
-
+        document.querySelector('#vf-note span').innerHTML = `${typeMap[res.type] || 'Код отправлен'} на <b>${formatted}</b>`;
         goTo('page-verify');
     } catch (e) {
         setMsg('aa-msg', e.message, 'error');
@@ -797,39 +975,30 @@ async function sendCode() {
     }
 }
 
-// ═══════════════════════════════════════════════
-// Подтверждение кода
-// ═══════════════════════════════════════════════
 async function confirmCode() {
     const code = document.getElementById('vf-code').value.trim();
     const twofa = document.getElementById('vf-2fa').value.trim();
-
     if (!code) { setMsg('vf-msg', 'Введите код', 'error'); return; }
-    if (!PENDING_PHONE) { setMsg('vf-msg', 'Сессия истекла, начните заново', 'error'); return; }
+    if (!PENDING_PHONE) { setMsg('vf-msg', 'Сессия истекла', 'error'); return; }
 
     setLoading('vf-btn', true, 'Проверка...');
     setMsg('vf-msg', '', '');
-
     try {
         const res = await api('/confirm-code', 'POST', {
             phone: PENDING_PHONE,
             code: code,
             password: twofa || null
         });
-
         if (res.need_2fa) {
             setMsg('vf-msg', '🔐 Введите 2FA пароль', 'info');
             document.getElementById('vf-2fa').focus();
             return;
         }
-
-        toast(`Аккаунт подключён! Супергрупп: ${res.account.supergroups_count}`, 'success');
+        toast(`Подключён! Супергрупп: ${res.account.supergroups_count}`, 'success');
         PENDING_PHONE = null;
-
         ['aa-phone','aa-apiid','aa-apihash','aa-proxy','vf-code','vf-2fa'].forEach(i => {
             document.getElementById(i).value = '';
         });
-
         setTimeout(() => {
             PAGE_STACK = ['page-main'];
             goTo('page-accounts');
@@ -846,15 +1015,14 @@ async function confirmCode() {
 }
 
 // ═══════════════════════════════════════════════
-// Список аккаунтов
+// ACCOUNTS
 // ═══════════════════════════════════════════════
 async function loadAccounts() {
     const list = document.getElementById('acc-list');
-    list.innerHTML = '<div class="empty"><div class="spinner" style="width:24px;height:24px;border-color:rgba(255,255,255,0.2);border-top-color:#4f7fff"></div><div style="margin-top:10px">Загрузка...</div></div>';
-
+    list.innerHTML = '<div class="empty"><div class="spinner" style="width:24px;height:24px;border-color:rgba(255,255,255,0.2);border-top-color:#4f7fff"></div></div>';
     try {
-        const res = await api('/accounts');
-        if (!res.accounts.length) {
+        const r = await api('/accounts');
+        if (!r.accounts.length) {
             list.innerHTML = `
                 <div class="empty">
                     <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
@@ -863,9 +1031,8 @@ async function loadAccounts() {
                 </div>`;
             return;
         }
-
         list.innerHTML = '';
-        res.accounts.forEach(a => {
+        r.accounts.forEach(a => {
             const initial = (a.first_name || a.phone || '?').charAt(0).toUpperCase();
             const card = document.createElement('div');
             card.className = 'card';
@@ -889,19 +1056,17 @@ async function loadAccounts() {
             list.appendChild(card);
         });
     } catch (e) {
-        list.innerHTML = `<div class="empty" style="color:var(--neon-rose)">Ошибка: ${esc(e.message)}</div>`;
+        list.innerHTML = `<div class="empty" style="color:var(--neon-rose)">${esc(e.message)}</div>`;
     }
 }
 
 async function refreshAccount(id) {
-    toast('Обновление списка супергрупп...', 'success');
+    toast('Обновление...', 'success');
     try {
-        const res = await api(`/accounts/${id}/refresh`, 'POST');
-        toast(`Найдено супергрупп: ${res.count}`, 'success');
+        const r = await api(`/accounts/${id}/refresh`, 'POST');
+        toast(`Найдено: ${r.count} супергрупп`, 'success');
         loadAccounts();
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    } catch (e) { toast(e.message, 'error'); }
 }
 
 async function deleteAccount(id, phone) {
@@ -910,21 +1075,18 @@ async function deleteAccount(id, phone) {
         await api(`/accounts/${id}`, 'DELETE');
         toast('Аккаунт удалён', 'success');
         loadAccounts();
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    } catch (e) { toast(e.message, 'error'); }
 }
 
 // ═══════════════════════════════════════════════
-// Рассылки
+// MAILINGS
 // ═══════════════════════════════════════════════
 async function loadMailings() {
     const list = document.getElementById('mail-list');
     list.innerHTML = '<div class="empty"><div class="spinner" style="width:24px;height:24px;border-color:rgba(255,255,255,0.2);border-top-color:#4f7fff"></div></div>';
-
     try {
-        const res = await api('/mailings');
-        if (!res.mailings.length) {
+        const r = await api('/mailings');
+        if (!r.mailings.length) {
             list.innerHTML = `
                 <div class="empty">
                     <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
@@ -933,47 +1095,39 @@ async function loadMailings() {
                 </div>`;
             return;
         }
-
         list.innerHTML = '';
-        res.mailings.forEach(m => renderMailing(m));
-
-        // Запускаем polling если есть активные
-        if (res.mailings.some(m => m.status === 'running')) {
-            startMailingPolling();
-        }
+        r.mailings.forEach(m => renderMailing(m));
+        if (r.mailings.some(m => m.status === 'running')) startMailingPolling();
     } catch (e) {
-        list.innerHTML = `<div class="empty" style="color:var(--neon-rose)">Ошибка: ${esc(e.message)}</div>`;
+        list.innerHTML = `<div class="empty" style="color:var(--neon-rose)">${esc(e.message)}</div>`;
     }
 }
 
 function renderMailing(m) {
     const list = document.getElementById('mail-list');
     let card = document.getElementById('mailing-' + m.id);
-    const isNew = !card;
-    if (isNew) {
+    if (!card) {
         card = document.createElement('div');
         card.id = 'mailing-' + m.id;
         card.className = 'card';
         list.appendChild(card);
     }
-
-    const percent = m.total > 0 ? Math.round((m.sent / m.total) * 100) : 0;
-    const statusClass = m.status === 'running' ? 's-running' : (m.status === 'finished' ? 's-finished' : 's-stopped');
-    const statusText = m.status === 'running' ? 'Запущена' : (m.status === 'finished' ? 'Завершена' : 'Остановлена');
-
+    const pct = m.total > 0 ? Math.round((m.sent / m.total) * 100) : 0;
+    const sc = m.status === 'running' ? 's-running' : (m.status === 'finished' ? 's-finished' : 's-stopped');
+    const st = m.status === 'running' ? 'Запущена' : (m.status === 'finished' ? 'Завершена' : 'Остановлена');
     card.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;">
             <div style="flex:1;min-width:0">
-                <div style="font-weight:800;font-size:16px;color:var(--t-100)">${esc(m.name)}</div>
+                <div style="font-weight:800;font-size:16px;">${esc(m.name)}</div>
                 <div style="font-size:11px;color:var(--t-400);margin-top:3px;font-family:'JetBrains Mono',monospace">Задержка ${m.delay}с</div>
             </div>
-            <span class="status-badge ${statusClass}">${statusText}</span>
+            <span class="status-badge ${sc}">${st}</span>
         </div>
         <div class="progress-text">
             <span>Прогресс</span>
             <span><strong>${m.sent}</strong> / ${m.total}</span>
         </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t-400);margin-bottom:12px;font-family:'JetBrains Mono',monospace">
             <span>✓ Отправлено: ${m.sent}</span>
             <span>✗ Ошибок: ${m.failed}</span>
@@ -982,65 +1136,44 @@ function renderMailing(m) {
         <div class="card-actions">
             ${m.status === 'running'
                 ? `<button class="btn-sm red" onclick="stopMailing(${m.id})">⏸ Остановить</button>`
-                : `<button class="btn-sm green" onclick="startMailing(${m.id})">▶ Запустить</button>`
-            }
+                : `<button class="btn-sm green" onclick="startMailing(${m.id})">▶ Запустить</button>`}
             <button class="btn-sm red" onclick="deleteMailing(${m.id})">🗑 Удалить</button>
-        </div>
-    `;
+        </div>`;
 }
 
 function startMailingPolling() {
     if (MAILING_POLL_INTERVAL) return;
     MAILING_POLL_INTERVAL = setInterval(async () => {
         if (!document.getElementById('page-mailings').classList.contains('active')) {
-            stopMailingPolling();
-            return;
+            stopMailingPolling(); return;
         }
         try {
-            const res = await api('/mailings');
-            res.mailings.forEach(m => renderMailing(m));
-            if (!res.mailings.some(m => m.status === 'running')) stopMailingPolling();
+            const r = await api('/mailings');
+            r.mailings.forEach(m => renderMailing(m));
+            if (!r.mailings.some(m => m.status === 'running')) stopMailingPolling();
         } catch {}
     }, 2000);
 }
 function stopMailingPolling() {
-    if (MAILING_POLL_INTERVAL) {
-        clearInterval(MAILING_POLL_INTERVAL);
-        MAILING_POLL_INTERVAL = null;
-    }
+    if (MAILING_POLL_INTERVAL) { clearInterval(MAILING_POLL_INTERVAL); MAILING_POLL_INTERVAL = null; }
 }
 
 async function startMailing(id) {
-    try {
-        await api(`/mailings/${id}/start`, 'POST');
-        toast('Рассылка запущена', 'success');
-        loadMailings();
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    try { await api(`/mailings/${id}/start`, 'POST'); toast('Запущена', 'success'); loadMailings(); }
+    catch (e) { toast(e.message, 'error'); }
 }
 async function stopMailing(id) {
-    try {
-        await api(`/mailings/${id}/stop`, 'POST');
-        toast('Рассылка остановлена', 'success');
-        loadMailings();
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    try { await api(`/mailings/${id}/stop`, 'POST'); toast('Остановлена', 'success'); loadMailings(); }
+    catch (e) { toast(e.message, 'error'); }
 }
 async function deleteMailing(id) {
     if (!confirm('Удалить рассылку?')) return;
-    try {
-        await api(`/mailings/${id}`, 'DELETE');
-        toast('Удалено', 'success');
-        loadMailings();
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    try { await api(`/mailings/${id}`, 'DELETE'); toast('Удалено', 'success'); loadMailings(); }
+    catch (e) { toast(e.message, 'error'); }
 }
 
 // ═══════════════════════════════════════════════
-// Создание рассылки
+// CREATE MAILING
 // ═══════════════════════════════════════════════
 async function goToCreate() {
     document.getElementById('cm-name').value = '';
@@ -1048,17 +1181,15 @@ async function goToCreate() {
     document.getElementById('cm-delay').value = '60';
     document.getElementById('cm-acc-info').style.display = 'none';
     setMsg('cm-msg', '', '');
-
     const sel = document.getElementById('cm-account');
     sel.innerHTML = '<option value="">— Выберите аккаунт —</option>';
-
     try {
-        const res = await api('/accounts');
-        if (!res.accounts.length) {
+        const r = await api('/accounts');
+        if (!r.accounts.length) {
             toast('Сначала подключите аккаунт', 'error');
             return;
         }
-        res.accounts.forEach(a => {
+        r.accounts.forEach(a => {
             const o = document.createElement('option');
             o.value = a.id;
             o.textContent = `${a.phone} (${a.supergroups_count} групп)`;
@@ -1066,9 +1197,7 @@ async function goToCreate() {
             sel.appendChild(o);
         });
         goTo('page-create');
-    } catch (e) {
-        toast(e.message, 'error');
-    }
+    } catch (e) { toast(e.message, 'error'); }
 }
 
 function updateAccountInfo() {
@@ -1078,9 +1207,7 @@ function updateAccountInfo() {
     if (opt && opt.value) {
         document.getElementById('cm-groups-count').textContent = opt.dataset.count || 0;
         info.style.display = 'flex';
-    } else {
-        info.style.display = 'none';
-    }
+    } else { info.style.display = 'none'; }
 }
 
 async function createMailing() {
@@ -1088,17 +1215,14 @@ async function createMailing() {
     const name = document.getElementById('cm-name').value.trim();
     const text = document.getElementById('cm-text').value.trim();
     const delay = parseInt(document.getElementById('cm-delay').value) || 60;
-
     if (!accId) { setMsg('cm-msg', 'Выберите аккаунт', 'error'); return; }
     if (!name) { setMsg('cm-msg', 'Введите название', 'error'); return; }
     if (!text) { setMsg('cm-msg', 'Введите текст', 'error'); return; }
 
     setLoading('cm-btn', true, 'Создание...');
     try {
-        await api('/mailings', 'POST', {
-            account_id: accId, name, text, delay
-        });
-        toast('Рассылка создана! Запустите её на странице рассылок', 'success');
+        await api('/mailings', 'POST', { account_id: accId, name, text, delay });
+        toast('Создано! Запустите рассылку.', 'success');
         setTimeout(() => {
             PAGE_STACK = ['page-main'];
             goTo('page-mailings');
