@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#030515">
+<title>Nebula</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap');
+
+:root {
+    --bg-void: #030515;
+    --bg-deep: #060a24;
+    --bg-mid: #0a1238;
+    --bg-card: rgba(15, 22, 60, 0.5);
+    --bg-card-hover: rgba(20, 28, 75, 0.6);
+    --bg-input: rgba(12, 18, 50, 0.6);
+    --bg-input-focus: rgba(20, 28, 80, 0.8);
+    --bg-glass: rgba(255, 255, 255, 0.025);
+    --bg-glass-strong: rgba(255, 255, 255, 0.05);
+
+    --neon-blue: #4f7fff;
+    --neon-purple: #a855f7;
+    --neon-pink: #ec4899;
+    --neon-cyan: #06b6d4;
+    --neon-green: #10b981;
+    --neon-amber: #f59e0b;
+    --neon-rose: #f43f5e;
+
+    --glow-blue: 0 0 40px rgba(79, 127, 255, 0.5);
+    --glow-purple: 0 0 40px rgba(168, 85, 247, 0.5);
+    --glow-pink: 0 0 40px rgba(236, 72, 153, 0.5);
+    --glow-cyan: 0 0 40px rgba(6, 182, 212, 0.5);
+
+    --g-cosmos: linear-gradient(135deg, #4f7fff 0%, #a855f7 50%, #ec4899 100%);
+    --g-aurora: linear-gradient(135deg, #4f7fff 0%, #06b6d4 100%);
+    --g-sunset: linear-gradient(135deg, #f59e0b 0%, #ec4899 50%, #a855f7 100%);
+    --g-mint: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+    --g-violet: linear-gradient(135deg, #a855f7 0%, #4f7fff 100%);
+    --g-fire: linear-gradient(135deg, #f43f5e 0%, #f59e0b 100%);
+    --g-text: linear-gradient(135deg, #93c5fd 0%, #c4b5fd 50%, #f9a8d4 100%);
+    --g-text-bright: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+    --g-card: linear-gradient(145deg, rgba(79,127,255,0.08), rgba(168,85,247,0.05) 50%, rgba(236,72,153,0.06));
+    --g-border: linear-gradient(135deg, rgba(79,127,255,0.4), rgba(168,85,247,0.4), rgba(236,72,153,0.4));
+
+    --t-100: #f5f7ff;
+    --t-200: #d4daf5;
+    --t-300: #9ba4d4;
+    --t-400: #6b75a8;
+    --t-500: #3f4870;
+    --t-600: #2a3258;
+
+    --b-1: rgba(79, 127, 255, 0.15);
+    --b-2: rgba(79, 127, 255, 0.25);
+    --b-3: rgba(79, 127, 255, 0.4);
+
+    --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --sh-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --sh-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --sh-glow: 0 8px 40px rgba(79, 127, 255, 0.35);
+    --sh-inner: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+    --r-xs: 8px;
+    --r-sm: 12px;
+    --r-md: 16px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+    --r-pill: 100px;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { overscroll-behavior: none; scroll-behavior: smooth; }
+body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-void);
+    color: var(--t-100);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    letter-spacing: -0.011em;
+}
+
+/* ═══ BACKGROUND ═══ */
+.cosmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora {
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background:
+        radial-gradient(circle at 15% 25%, rgba(79, 127, 255, 0.35) 0%, transparent 35%),
+        radial-gradient(circle at 85% 15%, rgba(168, 85, 247, 0.28) 0%, transparent 40%),
+        radial-gradient(circle at 50% 85%, rgba(236, 72, 153, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.18) 0%, transparent 35%);
+    animation: auroraSpin 30s linear infinite;
+    filter: blur(60px);
+}
+@keyframes auroraSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    33% { transform: rotate(120deg) scale(1.1); }
+    66% { transform: rotate(240deg) scale(0.95); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+.grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(79, 127, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 127, 255, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
+.stars { position: absolute; inset: 0; }
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 8px white; }
+}
+.orb { position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.4; animation: float 20s ease-in-out infinite; }
+.orb-1 { width: 200px; height: 200px; background: var(--neon-blue); top: 10%; left: 10%; animation-delay: 0s; }
+.orb-2 { width: 250px; height: 250px; background: var(--neon-purple); top: 60%; right: 5%; animation-delay: -7s; }
+.orb-3 { width: 180px; height: 180px; background: var(--neon-pink); bottom: 10%; left: 30%; animation-delay: -14s; }
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -40px); }
+    66% { transform: translate(-20px, 30px); }
+}
+
+#app { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; z-index: 1; }
+
+/* ═══ PAGES ═══ */
+.page { display: none; min-height: 100vh; animation: pageEnter 0.6s var(--ease); }
+.page.active { display: block; }
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); filter: blur(12px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* ═══ TOP BAR ═══ */
+.top-bar {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: rgba(6, 10, 36, 0.7);
+    backdrop-filter: blur(30px) saturate(2);
+    -webkit-backdrop-filter: blur(30px) saturate(2);
+    border-bottom: 1px solid var(--b-1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.top-bar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 20%; right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    opacity: 0.6;
+    animation: scanline 4s ease-in-out infinite;
+}
+@keyframes scanline {
+    0%, 100% { opacity: 0.3; transform: scaleX(0.5); }
+    50% { opacity: 0.8; transform: scaleX(1); }
+}
+.top-title { flex: 1; font-size: 17px; font-weight: 700; text-align: center; letter-spacing: -0.3px; font-family: 'Space Grotesk', sans-serif; }
+.top-title.gradient {
+    background: var(--g-text-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.btn-back {
+    background: var(--bg-glass);
+    border: 1px solid var(--b-1);
+    color: var(--t-100);
+    cursor: pointer;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+}
+.btn-back::before { content: ''; position: absolute; inset: 0; background: var(--g-cosmos); opacity: 0; transition: opacity 0.3s; }
+.btn-back:active { transform: scale(0.88); box-shadow: var(--glow-blue); }
+.btn-back:active::before { opacity: 1; }
+.btn-back svg { width: 18px; height: 18px; position: relative; z-index: 1; }
+.btn-logout {
+    background: rgba(244,63,94,0.08);
+    border: 1px solid rgba(244,63,94,0.2);
+    color: var(--neon-rose);
+    font-size: 12px; font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    display: flex; align-items: center; gap: 6px;
+}
+.btn-logout svg { width: 14px; height: 14px; }
+.btn-logout:active { background: var(--neon-rose); color: white; transform: scale(0.93); box-shadow: 0 0 30px rgba(244,63,94,0.6); }
+
+/* ═══ CONTENT ═══ */
+.page-content { padding: 20px 18px 60px; }
+.center-content { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 40px 22px; }
+
+/* ═══ HERO ═══ */
+.hero { text-align: center; margin-bottom: 48px; position: relative; }
+.hero-orb-wrap { position: relative; width: 120px; height: 120px; margin: 0 auto 28px; }
+.hero-orb-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    background: var(--g-cosmos) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ringRotate 8s linear infinite;
+}
+.hero-orb-ring:nth-child(2) { inset: 8px; animation-direction: reverse; animation-duration: 12s; opacity: 0.6; }
+@keyframes ringRotate { to { transform: rotate(360deg); } }
+
+.hero-logo {
+    position: absolute;
+    inset: 16px;
+    border-radius: 50%;
+    background: var(--g-cosmos);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 60px rgba(79,127,255,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+    animation: heroFloat 4s ease-in-out infinite;
+}
+.hero-logo::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: var(--g-cosmos);
+    opacity: 0.5;
+    filter: blur(20px);
+    z-index: -1;
+    animation: heroGlow 4s ease-in-out infinite;
+}
+.hero-logo svg { width: 44px; height: 44px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+@keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes heroGlow { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.15); } }
+
+.hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    background: var(--g-text-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1.6px;
+    line-height: 1;
+    margin-bottom: 10px;
+    position: relative;
+}
+.hero h1::after {
+    content: 'NEBULA';
+    position: absolute;
+    inset: 0;
+    background: var(--g-text-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: blur(20px);
+    opacity: 0.5;
+    z-index: -1;
+}
+.hero-sub {
+    color: var(--t-300);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+.hero-sub::before, .hero-sub::after {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--t-400));
+}
+.hero-sub::after { background: linear-gradient(90deg, var(--t-400), transparent); }
+
+/* ═══ FIELDS ═══ */
+.field { margin-bottom: 18px; position: relative; }
+.field label {
+    display: block;
+    font-size: 11px;
+    color: var(--t-300);
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.field-wrap { position: relative; display: flex; align-items: center; }
+.field-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--r-md);
+    background: var(--g-cosmos);
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 0.4s;
+    filter: blur(8px);
+}
+.field-wrap:focus-within::before { opacity: 0.6; }
+.field-icon {
+    position: absolute;
+    left: 16px;
+    color: var(--t-400);
+    pointer-events: none;
+    z-index: 2;
+    transition: all 0.3s var(--ease);
+}
+.field-icon svg { width: 18px; height: 18px; display: block; }
+.field input, .field textarea, .field select {
+    width: 100%;
+    padding: 16px 18px;
+    background: var(--bg-input);
+    border: 1.5px solid var(--b-1);
+    border-radius: var(--r-md);
+    color: var(--t-100);
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s var(--ease);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    position: relative;
+    z-index: 1;
+}
+.field.has-icon input { padding-left: 48px; }
+.field.has-toggle input { padding-right: 48px; }
+.field input::placeholder, .field textarea::placeholder { color: var(--t-500); font-weight: 500; }
+.field input:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--neon-blue);
+    background: var(--bg-input-focus);
+    box-shadow: 0 0 0 4px rgba(79,127,255,0.15), 0 12px 32px rgba(0,0,0,0.3);
+}
+.field-wrap:focus-within .field-icon { color: var(--neon-blue); transform: scale(1.1); }
+.field textarea { resize: vertical; min-height: 88px; line-height: 1.55; padding: 14px 18px; }
+.field select {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ba4d4' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    padding-right: 44px;
+}
+.field input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ═══ PASSWORD TOGGLE ═══ */
+.pwd-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--t-400);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: all 0.25s var(--ease);
+}
+.pwd-toggle:hover { color: var(--neon-blue); background: rgba(79,127,255,0.08); }
+.pwd-toggle:active { transform: translateY(-50%) scale(0.85); }
+.pwd-toggle svg { width: 18px; height: 18px; display: block; }
+.pwd-toggle .eye-off { display: none; }
+.pwd-toggle.shown .eye-on { display: none; }
+.pwd-toggle.shown .eye-off { display: block; }
+.pwd-toggle.shown { color: var(--neon-blue); }
+
+/* ═══════════════════════════════════════
+   CHECKBOX — PERFECT
+   ═══════════════════════════════════════ */
+.check-row { margin-bottom: 24px; }
+.check {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--t-200);
+    gap: 12px;
+    user-select: none;
+    padding: 10px 14px;
+    border-radius: var(--r-sm);
+    transition: background 0.2s;
+    font-weight: 500;
+    position: relative;
+}
+.check:hover { background: var(--bg-glass); }
+.check:active { background: var(--bg-glass-strong); }
+.check input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+}
+.checkmark {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border: 2px solid var(--b-2);
+    border-radius: 7px;
+    position: relative;
+    transition: background 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    flex-shrink: 0;
+    background: var(--bg-glass);
+    box-sizing: border-box;
+    display: inline-block;
+}
+.checkmark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translate(-50%, -50%) scale(0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: transform 0.25s var(--ease-bounce);
+    pointer-events: none;
+}
+.check input:checked + .checkmark {
+    background: var(--g-cosmos);
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(79,127,255,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.check input:checked + .checkmark::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* ═══ BUTTONS ═══ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 28px;
+    border: none;
+    border-radius: var(--r-md);
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.1px;
+    isolation: isolate;
+}
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary {
+    background: var(--g-cosmos);
+    color: white;
+    box-shadow: var(--sh-glow), var(--sh-inner);
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    transition: all 0.4s var(--ease), background-position 0.6s ease;
+}
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--g-cosmos);
+    z-index: -1;
+    filter: blur(15px);
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+.btn-primary:active { background-position: 100% 0%; }
+.btn-primary:hover::after { opacity: 0.9; }
+.btn-full { width: 100%; }
+.btn-lg { padding: 18px 28px; font-size: 16px; }
+.btn-icon { width: 18px; height: 18px; position: relative; z-index: 2; }
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+    z-index: 2;
+}
+@keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+.btn-small {
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--r-xs);
+    background: rgba(79,127,255,0.1);
+    color: var(--neon-blue);
+    border: 1px solid rgba(79,127,255,0.25);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    font-family: inherit;
+}
+.btn-small::before { display: none; }
+.btn-small:active { background: var(--neon-blue); color: white; transform: scale(0.94); box-shadow: var(--glow-blue); }
+
+.btn-danger, .btn-success, .btn-action {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--r-xs);
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    border: 1px solid;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-danger { background: rgba(244,63,94,0.1); color: var(--neon-rose); border-color: rgba(244,63,94,0.2); }
+.btn-danger::before { display: none; }
+.btn-danger:active { background: var(--neon-rose); color: white; transform: scale(0.94); box-shadow: 0 0 25px rgba(244,63,94,0.5); }
+.btn-success { background: rgba(16,185,129,0.1); color: var(--neon-green); border-color: rgba(16,185,129,0.2); }
+.btn-success::before { display: none; }
+.btn-success:active { background: var(--neon-green); color: white; transform: scale(0.94); box-shadow: 0 0 25px rgba(16,185,129,0.5); }
+.btn-action { background: rgba(168,85,247,0.1); color: var(--neon-purple); border-color: rgba(168,85,247,0.2); }
+.btn-action::before { display: none; }
+.btn-action:active { background: var(--neon-purple); color: white; transform: scale(0.94); box-shadow: var(--glow-purple); }
+
+/* ═══ WELCOME ═══ */
+.welcome { padding: 28px 18px 16px; text-align: left; position: relative; }
+.welcome::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, var(--neon-purple), transparent 70%);
+    opacity: 0.15;
+    filter: blur(20px);
+    border-radius: 50%;
+}
+.welcome-hello {
+    font-size: 13px;
+    color: var(--t-300);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.welcome-hello::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+    animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.welcome-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    background: var(--g-text-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+.welcome-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: var(--g-cosmos);
+    color: white;
+    margin-left: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    vertical-align: middle;
+    box-shadow: 0 4px 12px rgba(79,127,255,0.4);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ═══ STATS ═══ */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 18px; margin-bottom: 28px; }
+.stat {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--ease);
+}
+.stat::before { content: ''; position: absolute; inset: 0; background: var(--g-card); opacity: 0.6; z-index: 0; }
+.stat::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation: shimmer 4s infinite;
+}
+@keyframes shimmer { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+.stat-content { position: relative; z-index: 1; }
+.stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 12px;
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+}
+.stat-icon::before { content: ''; position: absolute; inset: -4px; border-radius: 14px; opacity: 0.4; filter: blur(8px); z-index: -1; }
+.stat-icon svg { width: 18px; height: 18px; color: white; }
+.s-i-1 { background: var(--g-cosmos); } .s-i-1::before { background: var(--g-cosmos); }
+.s-i-2 { background: var(--g-sunset); } .s-i-2::before { background: var(--g-sunset); }
+.s-i-3 { background: var(--g-mint); } .s-i-3::before { background: var(--g-mint); }
+.stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--t-100);
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+.stat-label { font-size: 10px; color: var(--t-300); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+
+/* ═══ MENU ═══ */
+.menu-section {
+    padding: 0 18px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--t-300);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.menu-section::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--b-1), transparent); }
+.menu-content { padding: 0 18px 60px; }
+.menu-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 18px;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    color: var(--t-100);
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+}
+.menu-btn::before { content: ''; position: absolute; inset: 0; background: var(--g-card); opacity: 0; transition: opacity 0.4s; }
+.menu-btn:hover { border-color: var(--b-2); transform: translateY(-1px); }
+.menu-btn:hover::before { opacity: 1; }
+.menu-btn:active { transform: scale(0.98) translateY(0); }
+.menu-icon {
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-right: 14px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    box-shadow: var(--sh-inner);
+}
+.menu-icon::before { content: ''; position: absolute; inset: -2px; border-radius: 16px; opacity: 0.5; filter: blur(10px); z-index: -1; transition: opacity 0.3s; }
+.menu-btn:hover .menu-icon::before { opacity: 0.8; }
+.menu-icon svg { width: 22px; height: 22px; color: white; position: relative; z-index: 1; }
+.mi-1 { background: var(--g-cosmos); } .mi-1::before { background: var(--g-cosmos); }
+.mi-2 { background: var(--g-violet); } .mi-2::before { background: var(--g-violet); }
+.mi-3 { background: var(--g-aurora); } .mi-3::before { background: var(--g-aurora); }
+.mi-4 { background: var(--g-sunset); } .mi-4::before { background: var(--g-sunset); }
+.menu-btn-text { position: relative; z-index: 1; flex: 1; line-height: 1.2; }
+.menu-btn-title { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+.menu-btn-sub { font-size: 12px; color: var(--t-300); font-weight: 500; margin-top: 4px; }
+.menu-arrow { color: var(--t-400); position: relative; z-index: 1; transition: all 0.3s var(--ease); flex-shrink: 0; }
+.menu-arrow svg { width: 18px; height: 18px; display: block; }
+.menu-btn:hover .menu-arrow { transform: translateX(4px); color: var(--neon-blue); }
+
+/* ═══ CARDS ═══ */
+.items-list { display: flex; flex-direction: column; gap: 12px; }
+.acc-grad-1 { --c-grad: linear-gradient(135deg, #4f7fff, #a855f7); --c-color: #4f7fff; }
+.acc-grad-2 { --c-grad: linear-gradient(135deg, #ec4899, #f43f5e); --c-color: #ec4899; }
+.acc-grad-3 { --c-grad: linear-gradient(135deg, #06b6d4, #10b981); --c-color: #06b6d4; }
+.acc-grad-4 { --c-grad: linear-gradient(135deg, #f59e0b, #ec4899); --c-color: #f59e0b; }
+.acc-grad-5 { --c-grad: linear-gradient(135deg, #10b981, #4f7fff); --c-color: #10b981; }
+.account-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--ease);
+}
+.account-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--c-grad, var(--g-cosmos));
+}
+.account-card::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    background: var(--c-grad, var(--g-cosmos));
+    opacity: 0.08;
+    border-radius: 50%;
+    filter: blur(30px);
+}
+.account-card > * { position: relative; z-index: 1; }
+.account-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.account-avatar {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: var(--c-grad, var(--g-cosmos));
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--sh-inner), 0 4px 16px rgba(0,0,0,0.2);
+    position: relative;
+}
+.account-avatar::before { content: ''; position: absolute; inset: -3px; border-radius: 16px; background: var(--c-grad, var(--g-cosmos)); opacity: 0.5; filter: blur(8px); z-index: -1; }
+.account-avatar svg { width: 22px; height: 22px; }
+.account-info { flex: 1; min-width: 0; }
+.account-phone { font-weight: 800; font-size: 16px; color: var(--t-100); letter-spacing: -0.3px; }
+.account-meta { font-size: 11px; color: var(--t-300); margin-top: 4px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+.account-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip {
+    font-size: 10px;
+    padding: 5px 11px;
+    background: var(--bg-glass);
+    border: 1px solid var(--b-1);
+    border-radius: 20px;
+    color: var(--t-200);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.chip svg { width: 11px; height: 11px; }
+.chip-success { color: var(--neon-green); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
+.chip-warn { color: var(--neon-amber); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
+.chip-info { color: var(--neon-cyan); border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.08); }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ═══ MAILING CARDS ═══ */
+.mailing-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+}
+.mailing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--g-aurora); }
+.mailing-card.running::before { background: var(--g-mint); }
+.mailing-card::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: var(--g-aurora);
+    opacity: 0.08;
+    border-radius: 50%;
+    filter: blur(25px);
+}
+.mailing-card.running::after { background: var(--g-mint); }
+.mailing-card > * { position: relative; z-index: 1; }
+.mailing-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+.mailing-name { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; color: var(--t-100); line-height: 1.3; }
+.mailing-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-bottom: 14px;
+    background: var(--b-1);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    border: 1px solid var(--b-1);
+}
+.mailing-stat { text-align: center; padding: 10px 8px; background: rgba(10, 15, 46, 0.5); }
+.mailing-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--t-100); line-height: 1; }
+.mailing-stat-val small { font-size: 11px; color: var(--t-400); font-weight: 600; margin-left: 1px; }
+.mailing-stat-lbl { font-size: 9px; color: var(--t-400); text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px; margin-top: 5px; }
+
+/* ═══ CHATS ═══ */
+.chats-list {
+    max-height: 320px;
+    overflow-y: auto;
+    background: rgba(6, 10, 36, 0.5);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 6px;
+    margin-top: 10px;
+}
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: var(--r-xs);
+    cursor: pointer;
+    transition: all 0.25s var(--ease);
+    gap: 12px;
+    user-select: none;
+    border: 1.5px solid transparent;
+    margin-bottom: 3px;
+}
+.chat-item:active { transform: scale(0.98); }
+.chat-item.selected {
+    background: rgba(79,127,255,0.12);
+    border-color: rgba(79,127,255,0.4);
+    box-shadow: inset 0 0 20px rgba(79,127,255,0.1);
+}
+.chat-avatar {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: var(--g-violet);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+    box-shadow: var(--sh-inner);
+}
+.chat-item:nth-child(5n+1) .chat-avatar { background: var(--g-cosmos); }
+.chat-item:nth-child(5n+2) .chat-avatar { background: var(--g-aurora); }
+.chat-item:nth-child(5n+3) .chat-avatar { background: var(--g-sunset); }
+.chat-item:nth-child(5n+4) .chat-avatar { background: var(--g-mint); }
+.chat-item:nth-child(5n+5) .chat-avatar { background: var(--g-fire); }
+.chat-check {
+    width: 22px; height: 22px;
+    min-width: 22px;
+    border: 2px solid var(--b-2);
+    border-radius: 7px;
+    flex-shrink: 0;
+    transition: all 0.25s var(--ease);
+    background: var(--bg-glass);
+    margin-left: auto;
+    position: relative;
+    box-sizing: border-box;
+}
+.chat-check::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 14px; height: 14px;
+    transform: translate(-50%, -50%) scale(0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: transform 0.25s var(--ease-bounce);
+}
+.chat-item.selected .chat-check {
+    background: var(--g-cosmos);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(79,127,255,0.5);
+}
+.chat-item.selected .chat-check::after { transform: translate(-50%, -50%) scale(1); }
+.chat-info { flex: 1; min-width: 0; }
+.chat-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--t-100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.chat-type { font-size: 10px; font-weight: 700; color: var(--t-400); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+.selected-count {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--t-200);
+    text-align: center;
+    font-weight: 600;
+    padding: 10px 12px;
+    background: var(--bg-glass);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-sm);
+}
+.selected-count strong {
+    background: var(--g-text-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+}
+
+/* ═══ STATUS ═══ */
+.status-badge {
+    font-size: 10px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.status-running { background: rgba(16,185,129,0.12); color: var(--neon-green); border: 1px solid rgba(16,185,129,0.3); }
+.status-running::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    animation: livePulse 1.5s infinite;
+    box-shadow: 0 0 8px var(--neon-green);
+}
+@keyframes livePulse {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+.status-stopped { background: rgba(244,63,94,0.1); color: var(--neon-rose); border: 1px solid rgba(244,63,94,0.25); }
+
+/* ═══ MSG ═══ */
+.msg { margin-top: 14px; font-size: 13px; text-align: center; min-height: 20px; font-weight: 600; padding: 0 10px; }
+.msg.error { color: var(--neon-rose); animation: shake 0.4s; }
+.msg.success { color: var(--neon-green); }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-icon {
+    width: 84px; height: 84px;
+    margin: 0 auto 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--b-1);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--t-400);
+    position: relative;
+    overflow: hidden;
+}
+.empty-icon::before { content: ''; position: absolute; inset: 0; background: var(--g-card); opacity: 0.4; }
+.empty-icon svg { width: 36px; height: 36px; position: relative; z-index: 1; }
+.empty-text { color: var(--t-200); font-size: 15px; font-weight: 700; margin-bottom: 6px; font-family: 'Space Grotesk', sans-serif; }
+.empty-sub { color: var(--t-400); font-size: 13px; font-weight: 500; }
+
+.section-head { display: flex; justify-content: space-between; align-items: center; margin: 28px 0 14px; }
+.section-head h3 { font-family: 'Space Grotesk', sans-serif; font-size: 11px; color: var(--t-300); font-weight: 700; text-transform: uppercase; letter-spacing: 1.3px; }
+
+/* ═══ USER CARD ═══ */
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+}
+.user-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: var(--g-violet); }
+.user-avatar {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    background: var(--g-cosmos);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: var(--sh-inner), 0 4px 16px rgba(79,127,255,0.3);
+    position: relative;
+}
+.user-avatar::before { content: ''; position: absolute; inset: -3px; border-radius: 16px; background: var(--g-cosmos); opacity: 0.5; filter: blur(8px); z-index: -1; }
+.user-info { flex: 1; min-width: 0; }
+.uname { font-weight: 800; font-size: 14px; display: block; color: var(--t-100); letter-spacing: -0.2px; }
+.upass { font-size: 12px; color: var(--t-300); display: block; margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+/* ═══ NOTE BANNER ═══ */
+.note-banner {
+    background: linear-gradient(135deg, rgba(79,127,255,0.08), rgba(168,85,247,0.05));
+    border: 1px solid var(--b-1);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--t-200);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+.note-banner::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: var(--g-cosmos); }
+.note-banner svg { width: 18px; height: 18px; color: var(--neon-blue); flex-shrink: 0; }
+
+.code-input {
+    text-align: center !important;
+    font-size: 28px !important;
+    letter-spacing: 14px !important;
+    font-weight: 800 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding-left: 14px !important;
+}
+
+/* ═══ FAB ═══ */
+.fab-create {
+    background: var(--g-cosmos);
+    color: white;
+    width: 100%;
+    padding: 18px;
+    border-radius: var(--r-md);
+    border: none;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px;
+    box-shadow: var(--sh-glow), var(--sh-inner);
+    font-family: inherit;
+    margin-bottom: 18px;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+.fab-create::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 50%); }
+.fab-create::after { content: ''; position: absolute; inset: -3px; background: var(--g-cosmos); z-index: -1; filter: blur(15px); opacity: 0.6; }
+.fab-create:active { transform: scale(0.97); }
+.fab-create svg { width: 18px; height: 18px; }
+
+/* ═══ TOAST ═══ */
+.toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: rgba(15, 22, 60, 0.95);
+    backdrop-filter: blur(30px) saturate(2);
+    color: var(--t-100);
+    border: 1px solid var(--b-2);
+    padding: 14px 24px;
+    border-radius: var(--r-md);
+    font-size: 14px;
+    font-weight: 700;
+    z-index: 9999;
+    transition: all 0.5s var(--ease-bounce);
+    opacity: 0;
+    box-shadow: var(--sh-lg);
+    text-align: center;
+    max-width: 90%;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast svg { width: 18px; height: 18px; }
+.toast.t-success { border-color: rgba(16,185,129,0.5); box-shadow: var(--sh-lg), 0 0 30px rgba(16,185,129,0.3); }
+.toast.t-success svg { color: var(--neon-green); }
+.toast.t-error { border-color: rgba(244,63,94,0.5); box-shadow: var(--sh-lg), 0 0 30px rgba(244,63,94,0.3); }
+.toast.t-error svg { color: var(--neon-rose); }
+
+/* ═══ MODAL ═══ */
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 5, 21, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9998;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modalBgIn 0.3s var(--ease);
+}
+.modal-bg.show { display: flex; }
+@keyframes modalBgIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+    background: var(--bg-deep);
+    border: 1px solid var(--b-2);
+    border-radius: var(--r-lg);
+    padding: 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--sh-lg);
+    animation: modalIn 0.4s var(--ease-bounce);
+    position: relative;
+    overflow: hidden;
+}
+.modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--g-fire); }
+@keyframes modalIn { from { transform: scale(0.85) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.modal-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    background: rgba(244,63,94,0.1);
+    border: 1px solid rgba(244,63,94,0.3);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--neon-rose);
+}
+.modal-icon svg { width: 28px; height: 28px; }
+.modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--t-100); margin-bottom: 8px; }
+.modal-text { font-size: 14px; color: var(--t-300); margin-bottom: 20px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 10px; }
+.modal-actions button {
+    flex: 1;
+    padding: 13px;
+    border-radius: var(--r-sm);
+    border: none;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    font-family: inherit;
+}
+.modal-btn-cancel { background: var(--bg-glass); color: var(--t-200); border: 1px solid var(--b-1); }
+.modal-btn-cancel:active { transform: scale(0.96); background: var(--bg-glass-strong); }
+.modal-btn-confirm { background: var(--g-fire); color: white; box-shadow: 0 4px 16px rgba(244,63,94,0.4); }
+.modal-btn-confirm:active { transform: scale(0.96); }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--b-2); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+@media (max-width: 380px) {
+    .page-content { padding: 16px 14px 60px; }
+    .menu-content { padding: 0 14px 60px; }
+    .stats { padding: 0 14px; }
+    .welcome { padding: 24px 14px 14px; }
+    .hero h1 { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cosmos">
+    <div class="aurora"></div>
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="stars" id="stars"></div>
+</div>
+
+<div id="app">
+
+<!-- LOGIN -->
+<div id="page-login" class="page active">
+    <div class="center-content">
+        <div class="hero">
+            <div class="hero-orb-wrap">
+                <div class="hero-orb-ring"></div>
+                <div class="hero-orb-ring"></div>
+                <div class="hero-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        <path d="M2 12h20"/>
+                    </svg>
+                </div>
+            </div>
+            <h1>NEBULA</h1>
+            <p class="hero-sub">Система рассылок</p>
+        </div>
+
+        <div class="field has-icon">
+            <label>Логин</label>
+            <div class="field-wrap">
+                <span class="field-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </span>
+                <input type="text" id="login-user" placeholder="Введите логин" autocomplete="username">
+            </div>
+        </div>
+
+        <div class="field has-icon has-toggle">
+            <label>Пароль</label>
+            <div class="field-wrap">
+                <span class="field-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </span>
+                <input type="password" id="login-pass" placeholder="Введите пароль" autocomplete="current-password">
+                <button type="button" class="pwd-toggle" onclick="togglePwd(this,'login-pass')" aria-label="Показать пароль">
+                    <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="check-row">
+            <label class="check">
+                <input type="checkbox" id="login-remember">
+                <span class="checkmark"></span>
+                Запомнить меня
+            </label>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">
+            <span>Войти в систему</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+            </svg>
+        </button>
+        <div id="login-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div id="page-main" class="page">
+    <div class="top-bar">
+        <span class="top-title gradient" id="main-title">Nebula</span>
+        <button class="btn-logout" onclick="doLogout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Выход
+        </button>
+    </div>
+
+    <div class="welcome">
+        <div class="welcome-hello">Online</div>
+        <div>
+            <span class="welcome-name" id="welcome-name">User</span>
+            <span class="welcome-badge" id="welcome-badge">USER</span>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-content">
+                <div class="stat-icon s-i-1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <div class="stat-num" id="stat-acc">0</div>
+                <div class="stat-label">Аккаунты</div>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-content">
+                <div class="stat-icon s-i-2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div class="stat-num" id="stat-mail">0</div>
+                <div class="stat-label">Рассылки</div>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-content">
+                <div class="stat-icon s-i-3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div class="stat-num" id="stat-sent">0</div>
+                <div class="stat-label">Отправлено</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-section">Управление</div>
+    <div class="menu-content">
+        <button class="menu-btn" onclick="goTo('page-add-account')">
+            <div class="menu-icon mi-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <div class="menu-btn-text">
+                <div class="menu-btn-title">Добавить аккаунт</div>
+                <div class="menu-btn-sub">Подключить Telegram аккаунт</div>
+            </div>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="menu-btn" id="btn-add-user" style="display:none" onclick="goTo('page-add-user')">
+            <div class="menu-icon mi-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            </div>
+            <div class="menu-btn-text">
+                <div class="menu-btn-title">Добавить пользователя</div>
+                <div class="menu-btn-sub">Управление доступом</div>
+            </div>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="menu-btn" onclick="goTo('page-accounts')">
+            <div class="menu-icon mi-3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <div class="menu-btn-text">
+                <div class="menu-btn-title">Мои аккаунты</div>
+                <div class="menu-btn-sub">Список подключённых</div>
+            </div>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="menu-btn" onclick="goTo('page-mailings')">
+            <div class="menu-icon mi-4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+            <div class="menu-btn-text">
+                <div class="menu-btn-title">Мои рассылки</div>
+                <div class="menu-btn-sub">Управление кампаниями</div>
+            </div>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+    </div>
+</div>
+
+<!-- ADD ACCOUNT -->
+<div id="page-add-account" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Добавить аккаунт</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <div class="note-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Используйте API данные с my.telegram.org</span>
+        </div>
+
+        <div class="field"><label>Номер телефона</label><input type="text" id="acc-phone" placeholder="+7 (XXX) XXX-XX-XX"></div>
+        <div class="field"><label>API ID</label><input type="text" id="acc-apiid" placeholder="Введите API ID"></div>
+        <div class="field"><label>API Hash</label><input type="text" id="acc-apihash" placeholder="Введите API Hash"></div>
+        <div class="field"><label>Прокси</label><input type="text" id="acc-proxy" placeholder="socks5://user:pass@host:port" disabled></div>
+        <div class="check-row">
+            <label class="check">
+                <input type="checkbox" id="acc-use-proxy" onchange="document.getElementById('acc-proxy').disabled=!this.checked">
+                <span class="checkmark"></span>
+                Использовать прокси
+            </label>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" onclick="addAccountDemo()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Отправить код
+        </button>
+        <div id="acc-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- VERIFY -->
+<div id="page-verify" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Подтверждение</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <div class="note-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span>Код отправлен в Telegram</span>
+        </div>
+
+        <div class="field"><label>Код подтверждения</label><input type="text" id="verify-code" placeholder="• • • • •" maxlength="6" class="code-input"></div>
+
+        <div class="field has-toggle">
+            <label>2FA пароль (если есть)</label>
+            <div class="field-wrap">
+                <input type="password" id="verify-2fa" placeholder="Оставьте пустым если нет">
+                <button type="button" class="pwd-toggle" onclick="togglePwd(this,'verify-2fa')" aria-label="Показать пароль">
+                    <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" onclick="confirmAccount()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Подтвердить
+        </button>
+        <div id="verify-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- ADD USER -->
+<div id="page-add-user" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Пользователи</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <div class="field"><label>Логин</label><input type="text" id="new-uname" placeholder="Логин нового пользователя"></div>
+        <div class="field"><label>Пароль</label><input type="text" id="new-upass" placeholder="Пароль нового пользователя"></div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="createUser()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Создать пользователя
+        </button>
+        <div id="user-msg" class="msg"></div>
+
+        <div class="section-head"><h3>Список пользователей</h3></div>
+        <div id="users-list" class="items-list"></div>
+    </div>
+</div>
+
+<!-- ACCOUNTS -->
+<div id="page-accounts" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Мои аккаунты</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <div id="accounts-list" class="items-list"></div>
+        <div id="accounts-empty" class="empty-state">
+            <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+            <div class="empty-text">Нет добавленных аккаунтов</div>
+            <div class="empty-sub">Подключите Telegram аккаунт</div>
+        </div>
+    </div>
+</div>
+
+<!-- MAILINGS -->
+<div id="page-mailings" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Мои рассылки</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <button class="fab-create" onclick="goToCreate()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Создать рассылку
+        </button>
+        <div id="mailings-list" class="items-list"></div>
+        <div id="mailings-empty" class="empty-state">
+            <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+            <div class="empty-text">Нет созданных рассылок</div>
+            <div class="empty-sub">Создайте первую рассылку</div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE -->
+<div id="page-create" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Создать рассылку</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <div class="field"><label>Название рассылки</label><input type="text" id="c-name" placeholder="Например: Утренняя рассылка"></div>
+        <div class="field"><label>Текст сообщения 1</label><textarea id="c-t1" rows="3" placeholder="Основной текст сообщения"></textarea></div>
+        <div class="field"><label>Текст сообщения 2 <span style="opacity:.5">(необязательно)</span></label><textarea id="c-t2" rows="3" placeholder="Альтернативный вариант"></textarea></div>
+        <div class="field"><label>Текст сообщения 3 <span style="opacity:.5">(необязательно)</span></label><textarea id="c-t3" rows="3" placeholder="Ещё один вариант"></textarea></div>
+        <div class="field"><label>Интервал между сообщениями (сек)</label><input type="number" id="c-interval" value="60" min="5"></div>
+        <div class="field">
+            <label>Аккаунт для рассылки</label>
+            <select id="c-account" onchange="loadChats('c-chats','c-count')"><option value="">— Выберите аккаунт —</option></select>
+        </div>
+        <div class="field">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <label style="margin:0">Чаты для рассылки</label>
+                <button class="btn-small" onclick="selectAll('c-chats','c-count')">Выбрать все</button>
+            </div>
+            <div id="c-chats" class="chats-list">
+                <div class="empty-state" style="padding:24px 16px"><div class="empty-sub">Сначала выберите аккаунт</div></div>
+            </div>
+            <div class="selected-count">Выбрано чатов: <strong id="c-count">0</strong></div>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="createMailing()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Запустить рассылку
+        </button>
+        <div id="create-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- EDIT -->
+<div id="page-edit" class="page">
+    <div class="top-bar">
+        <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="top-title">Редактирование</span>
+        <button class="btn-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+    <div class="page-content">
+        <input type="hidden" id="e-id">
+        <div class="field"><label>Название рассылки</label><input type="text" id="e-name"></div>
+        <div class="field"><label>Текст 1</label><textarea id="e-t1" rows="3"></textarea></div>
+        <div class="field"><label>Текст 2</label><textarea id="e-t2" rows="3"></textarea></div>
+        <div class="field"><label>Текст 3</label><textarea id="e-t3" rows="3"></textarea></div>
+        <div class="field"><label>Интервал (сек)</label><input type="number" id="e-interval" min="5"></div>
+        <div class="field">
+            <label>Аккаунт</label>
+            <select id="e-account" onchange="loadChats('e-chats','e-count')"><option value="">— Выберите аккаунт —</option></select>
+        </div>
+        <div class="field">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <label style="margin:0">Чаты</label>
+                <button class="btn-small" onclick="selectAll('e-chats','e-count')">Выбрать все</button>
+            </div>
+            <div id="e-chats" class="chats-list"></div>
+            <div class="selected-count">Выбрано чатов: <strong id="e-count">0</strong></div>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="saveMailing()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Сохранить изменения
+        </button>
+        <div id="edit-msg" class="msg"></div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-text"></span>
+</div>
+
+<!-- MODAL -->
+<div id="modal-bg" class="modal-bg">
+    <div class="modal">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+        </div>
+        <div class="modal-title" id="modal-title">Подтверждение</div>
+        <div class="modal-text" id="modal-text">Вы уверены?</div>
+        <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeModal()">Отмена</button>
+            <button class="modal-btn-confirm" id="modal-confirm">Удалить</button>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+const S = {
+    g(k) { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } },
+    s(k, v) { localStorage.setItem(k, JSON.stringify(v)) },
+    d(k) { localStorage.removeItem(k) }
+};
+function getUsers() { return S.g('u') || [{id:1,username:'admin',password:'admin123',isAdmin:true}] }
+function saveUsers(u) { S.s('u', u) }
+function getAccounts() { return S.g('a') || [] }
+function saveAccounts(a) { S.s('a', a) }
+function getMailings() { return S.g('m') || [] }
+function saveMailings(m) { S.s('m', m) }
+
+let CU = null, PS = [], PA = null;
+
+function generateStars() {
+    const stars = document.getElementById('stars');
+    for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        stars.appendChild(star);
+    }
+}
+
+function addRipple(e) {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size/2;
+    const y = e.clientY - rect.top - size/2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+}
+function attachRipples() {
+    document.querySelectorAll('.btn-primary, .fab-create, .menu-btn').forEach(b => {
+        b.removeEventListener('click', addRipple);
+        b.addEventListener('click', addRipple);
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    generateStars();
+    attachRipples();
+    const s = S.g('session');
+    if (s) {
+        const u = getUsers().find(x => x.id === s.id && x.password === s.pw);
+        if (u) { CU = u; openMain(); return; }
+    }
+    showPage('page-login');
+    document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin() });
+    document.getElementById('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pass').focus() });
+});
+
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setTimeout(attachRipples, 50);
+}
+function goTo(id) {
+    const c = document.querySelector('.page.active');
+    if (c) PS.push(c.id);
+    showPage(id);
+    if (id === 'page-accounts') renderAccounts();
+    if (id === 'page-mailings') renderMailings();
+    if (id === 'page-add-user') renderUsers();
+    if (id === 'page-main') updateStats();
+}
+function goBack() {
+    if (!PS.length) return;
+    const p = PS.pop();
+    showPage(p);
+    if (p === 'page-accounts') renderAccounts();
+    if (p === 'page-mailings') renderMailings();
+    if (p === 'page-add-user') renderUsers();
+    if (p === 'page-main') updateStats();
+}
+
+const toastIcons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+};
+function toast(m, t = 'success') {
+    const e = document.getElementById('toast');
+    e.innerHTML = toastIcons[t] + '<span>' + m + '</span>';
+    e.className = 'toast show t-' + t;
+    setTimeout(() => e.className = 'toast', 3200);
+}
+
+let confirmCallback = null;
+function showConfirm(title, text, cb) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-text').textContent = text;
+    confirmCallback = cb;
+    document.getElementById('modal-bg').classList.add('show');
+}
+function closeModal() {
+    document.getElementById('modal-bg').classList.remove('show');
+    confirmCallback = null;
+}
+document.getElementById('modal-confirm').addEventListener('click', () => {
+    if (confirmCallback) confirmCallback();
+    closeModal();
+});
+document.getElementById('modal-bg').addEventListener('click', e => {
+    if (e.target.id === 'modal-bg') closeModal();
+});
+
+function togglePwd(btn, inputId) {
+    const input = document.getElementById(inputId);
+    const shown = input.type === 'text';
+    input.type = shown ? 'password' : 'text';
+    btn.classList.toggle('shown', !shown);
+    btn.setAttribute('aria-label', shown ? 'Показать пароль' : 'Скрыть пароль');
+}
+
+function doLogin() {
+    const u = document.getElementById('login-user').value.trim();
+    const p = document.getElementById('login-pass').value.trim();
+    const r = document.getElementById('login-remember').checked;
+    if (!u || !p) { setMsg('login-msg', 'Заполните все поля', 'error'); return; }
+    const user = getUsers().find(x => x.username === u && x.password === p);
+    if (!user) { setMsg('login-msg', 'Неверный логин или пароль', 'error'); return; }
+    CU = user;
+    if (r) S.s('session', { id: user.id, pw: user.password });
+    else S.d('session');
+    document.getElementById('login-msg').textContent = '';
+    openMain();
+}
+function doLogout() {
+    CU = null; S.d('session'); PS = [];
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+    showPage('page-login');
+}
+function openMain() {
+    PS = [];
+    document.getElementById('btn-add-user').style.display = CU.isAdmin ? 'flex' : 'none';
+    document.getElementById('main-title').textContent = CU.username;
+    document.getElementById('welcome-name').textContent = CU.username;
+    document.getElementById('welcome-badge').textContent = CU.isAdmin ? 'ADMIN' : 'USER';
+    updateStats();
+    showPage('page-main');
+}
+function updateStats() {
+    const ac = getAccounts().filter(a => a.userId === CU.id);
+    const ml = getMailings().filter(m => m.userId === CU.id);
+    animateNum('stat-acc', ac.length);
+    animateNum('stat-mail', ml.length);
+    animateNum('stat-sent', ml.reduce((s, m) => s + (m.sentCount || 0), 0));
+}
+function animateNum(id, target) {
+    const el = document.getElementById(id);
+    const start = parseInt(el.textContent) || 0;
+    if (start === target) { el.textContent = target; return; }
+    const dur = 800, steps = 25, inc = (target - start) / steps;
+    let cur = start, i = 0;
+    const t = setInterval(() => {
+        i++; cur += inc;
+        if (i >= steps) { el.textContent = target; clearInterval(t); }
+        else { el.textContent = Math.round(cur); }
+    }, dur / steps);
+}
+
+function addAccountDemo() {
+    const ph = document.getElementById('acc-phone').value.trim();
+    const ai = document.getElementById('acc-apiid').value.trim();
+    const ah = document.getElementById('acc-apihash').value.trim();
+    if (!ph || !ai || !ah) { setMsg('acc-msg', 'Заполните все обязательные поля', 'error'); return; }
+    PA = {
+        phone: ph, apiId: ai, apiHash: ah,
+        proxy: document.getElementById('acc-proxy').value.trim(),
+        useProxy: document.getElementById('acc-use-proxy').checked
+    };
+    setMsg('acc-msg', '', '');
+    setTimeout(() => goTo('page-verify'), 200);
+}
+function confirmAccount() {
+    const code = document.getElementById('verify-code').value.trim();
+    if (!code) { setMsg('verify-msg', 'Введите код', 'error'); return; }
+    const a = getAccounts();
+    a.push({
+        id: Date.now(), userId: CU.id, phone: PA.phone, apiId: PA.apiId,
+        apiHash: PA.apiHash, proxy: PA.proxy, useProxy: PA.useProxy,
+        chats: [
+            {id: -1001001, title: 'Общий чат', type: 'group'},
+            {id: -1001002, title: 'Новости проекта', type: 'channel'},
+            {id: -1001003, title: 'Отдел продаж', type: 'group'},
+            {id: -1001004, title: 'Геймеры онлайн', type: 'group'},
+            {id: -1001005, title: 'Daily Digest', type: 'channel'},
+            {id: -1001006, title: 'Бизнес клуб', type: 'group'},
+            {id: -1001007, title: 'Music Vibes', type: 'channel'},
+            {id: -1001008, title: 'Fitness Zone', type: 'group'},
+            {id: -1001009, title: 'Crypto News', type: 'channel'},
+            {id: -1001010, title: 'Tech Talk', type: 'group'}
+        ]
+    });
+    saveAccounts(a);
+    setMsg('verify-msg', '', '');
+    toast('Аккаунт подключён успешно');
+    ['acc-phone','acc-apiid','acc-apihash','acc-proxy','verify-code','verify-2fa'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('acc-use-proxy').checked = false;
+    PA = null;
+    setTimeout(() => { PS = ['page-main']; goTo('page-accounts'); }, 800);
+}
+function renderAccounts() {
+    const a = getAccounts().filter(x => x.userId === CU.id);
+    const l = document.getElementById('accounts-list');
+    const e = document.getElementById('accounts-empty');
+    l.innerHTML = '';
+    if (!a.length) { e.style.display = 'block'; return; }
+    e.style.display = 'none';
+    a.forEach((ac, idx) => {
+        const grad = (idx % 5) + 1;
+        const c = document.createElement('div');
+        c.className = `account-card acc-grad-${grad}`;
+        c.innerHTML = `
+        <div class="account-card-top">
+            <div class="account-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <div class="account-info">
+                <div class="account-phone">${esc(ac.phone)}</div>
+                <div class="account-meta">API: ${esc(ac.apiId)}</div>
+            </div>
+        </div>
+        <div class="account-chips">
+            <span class="chip chip-success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Активен
+            </span>
+            <span class="chip ${ac.useProxy ? 'chip-warn' : 'chip-info'}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${ac.useProxy ? '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>' : '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'}</svg>
+                ${ac.useProxy ? 'Прокси' : 'Прямое'}
+            </span>
+            <span class="chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                ${ac.chats?.length || 0} чатов
+            </span>
+        </div>
+        <div class="card-actions">
+            <button class="btn-danger" onclick="askDeleteAccount(${ac.id})">
+                <svg style="width:13px;height:13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Удалить
+            </button>
+        </div>`;
+        l.appendChild(c);
+    });
+}
+function askDeleteAccount(id) {
+    showConfirm('Удалить аккаунт?', 'Аккаунт и все связанные с ним рассылки будут удалены.', () => {
+        let a = getAccounts(); a = a.filter(x => x.id !== id); saveAccounts(a);
+        let m = getMailings(); m = m.filter(x => x.accountId !== id); saveMailings(m);
+        toast('Аккаунт удалён');
+        renderAccounts();
+    });
+}
+
+function createUser() {
+    const n = document.getElementById('new-uname').value.trim();
+    const p = document.getElementById('new-upass').value.trim();
+    if (!n || !p) { setMsg('user-msg', 'Заполните все поля', 'error'); return; }
+    const u = getUsers();
+    if (u.find(x => x.username === n)) { setMsg('user-msg', 'Пользователь уже существует', 'error'); return; }
+    u.push({ id: Date.now(), username: n, password: p, isAdmin: false });
+    saveUsers(u);
+    document.getElementById('new-uname').value = '';
+    document.getElementById('new-upass').value = '';
+    setMsg('user-msg', '', '');
+    toast('Пользователь создан');
+    renderUsers();
+}
+function renderUsers() {
+    const u = getUsers().filter(x => !x.isAdmin);
+    const l = document.getElementById('users-list');
+    l.innerHTML = '';
+    if (!u.length) {
+        l.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="empty-text">Нет пользователей</div></div>';
+        return;
+    }
+    u.forEach(usr => {
+        const initial = usr.username.charAt(0).toUpperCase();
+        const c = document.createElement('div');
+        c.className = 'user-card';
+        c.innerHTML = `
+            <div class="user-avatar">${initial}</div>
+            <div class="user-info">
+                <span class="uname">${esc(usr.username)}</span>
+                <span class="upass">${esc(usr.password)}</span>
+            </div>
+            <button class="btn-danger" onclick="askDeleteUser(${usr.id})">
+                <svg style="width:13px;height:13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>`;
+        l.appendChild(c);
+    });
+}
+function askDeleteUser(id) {
+    showConfirm('Удалить пользователя?', 'Пользователь потеряет доступ к системе.', () => {
+        let u = getUsers(); u = u.filter(x => x.id !== id); saveUsers(u);
+        toast('Пользователь удалён');
+        renderUsers();
+    });
+}
+
+function renderMailings() {
+    const m = getMailings().filter(x => x.userId === CU.id);
+    const l = document.getElementById('mailings-list');
+    const e = document.getElementById('mailings-empty');
+    l.innerHTML = '';
+    if (!m.length) { e.style.display = 'block'; return; }
+    e.style.display = 'none';
+    m.forEach(ml => {
+        const r = ml.status === 'running';
+        const c = document.createElement('div');
+        c.className = 'mailing-card' + (r ? ' running' : '');
+        c.innerHTML = `
+        <div class="mailing-card-top">
+            <div class="mailing-name">${esc(ml.name)}</div>
+            <span class="status-badge ${r ? 'status-running' : 'status-stopped'}">${r ? 'Активна' : 'Остановлена'}</span>
+        </div>
+        <div class="mailing-stats">
+            <div class="mailing-stat"><div class="mailing-stat-val">${ml.sentCount || 0}</div><div class="mailing-stat-lbl">Отправлено</div></div>
+            <div class="mailing-stat"><div class="mailing-stat-val">${(ml.chats || []).length}</div><div class="mailing-stat-lbl">Чатов</div></div>
+            <div class="mailing-stat"><div class="mailing-stat-val">${ml.interval}<small>с</small></div><div class="mailing-stat-lbl">Интервал</div></div>
+        </div>
+        <div class="card-actions">
+            ${r ? `<button class="btn-danger" onclick="toggleM(${ml.id})"><svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Стоп</button>` : `<button class="btn-success" onclick="toggleM(${ml.id})"><svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>Старт</button>`}
+            <button class="btn-action" onclick="openEdit(${ml.id})"><svg style="width:12px;height:12px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Изменить</button>
+            <button class="btn-danger" onclick="askDeleteM(${ml.id})"><svg style="width:13px;height:13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>`;
+        l.appendChild(c);
+    });
+}
+function goToCreate() {
+    fillSel('c-account');
+    ['c-name','c-t1','c-t2','c-t3'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('c-interval').value = '60';
+    document.getElementById('c-chats').innerHTML = '<div class="empty-state" style="padding:24px 16px"><div class="empty-sub">Сначала выберите аккаунт</div></div>';
+    document.getElementById('c-count').textContent = '0';
+    document.getElementById('create-msg').textContent = '';
+    goTo('page-create');
+}
+function createMailing() {
+    const n = document.getElementById('c-name').value.trim();
+    const t1 = document.getElementById('c-t1').value;
+    const t2 = document.getElementById('c-t2').value;
+    const t3 = document.getElementById('c-t3').value;
+    const iv = parseInt(document.getElementById('c-interval').value) || 60;
+    const ai = parseInt(document.getElementById('c-account').value);
+    const ch = getSel('c-chats', ai);
+    if (!n || !t1 || !ai) { setMsg('create-msg', 'Заполните название, текст 1 и выберите аккаунт', 'error'); return; }
+    if (!ch.length) { setMsg('create-msg', 'Выберите хотя бы один чат', 'error'); return; }
+    const m = getMailings();
+    m.push({ id: Date.now(), userId: CU.id, accountId: ai, name: n, t1, t2, t3, interval: iv, chats: ch, status: 'running', sentCount: 0 });
+    saveMailings(m);
+    toast('Рассылка запущена');
+    PS = ['page-main'];
+    goTo('page-mailings');
+}
+function toggleM(id) {
+    const m = getMailings();
+    const ml = m.find(x => x.id === id);
+    if (!ml) return;
+    ml.status = ml.status === 'running' ? 'stopped' : 'running';
+    saveMailings(m);
+    toast(ml.status === 'running' ? 'Рассылка запущена' : 'Рассылка остановлена');
+    renderMailings();
+}
+function askDeleteM(id) {
+    showConfirm('Удалить рассылку?', 'Это действие нельзя отменить.', () => {
+        let m = getMailings(); m = m.filter(x => x.id !== id); saveMailings(m);
+        toast('Рассылка удалена');
+        renderMailings();
+    });
+}
+function openEdit(id) {
+    const m = getMailings().find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('e-id').value = m.id;
+    document.getElementById('e-name').value = m.name;
+    document.getElementById('e-t1').value = m.t1 || '';
+    document.getElementById('e-t2').value = m.t2 || '';
+    document.getElementById('e-t3').value = m.t3 || '';
+    document.getElementById('e-interval').value = m.interval || 60;
+    document.getElementById('edit-msg').textContent = '';
+    fillSel('e-account', m.accountId);
+    goTo('page-edit');
+    loadChats('e-chats', 'e-count', m.accountId, m.chats);
+}
+function saveMailing() {
+    const id = parseInt(document.getElementById('e-id').value);
+    const n = document.getElementById('e-name').value.trim();
+    const t1 = document.getElementById('e-t1').value;
+    const t2 = document.getElementById('e-t2').value;
+    const t3 = document.getElementById('e-t3').value;
+    const iv = parseInt(document.getElementById('e-interval').value) || 60;
+    const ai = parseInt(document.getElementById('e-account').value);
+    const ch = getSel('e-chats', ai);
+    if (!n || !ai) { setMsg('edit-msg', 'Заполните название и выберите аккаунт', 'error'); return; }
+    const m = getMailings();
+    const ml = m.find(x => x.id === id);
+    if (!ml) return;
+    Object.assign(ml, { name: n, t1, t2, t3, interval: iv, accountId: ai, chats: ch });
+    saveMailings(m);
+    toast('Рассылка обновлена');
+    PS = ['page-main'];
+    goTo('page-mailings');
+}
+
+function fillSel(selId, selVal) {
+    const s = document.getElementById(selId);
+    const a = getAccounts().filter(x => x.userId === CU.id);
+    s.innerHTML = '<option value="">— Выберите аккаунт —</option>';
+    a.forEach(ac => {
+        const o = document.createElement('option');
+        o.value = ac.id;
+        o.textContent = ac.phone;
+        if (selVal && ac.id === selVal) o.selected = true;
+        s.appendChild(o);
+    });
+}
+function loadChats(cId, countId, forceId, pre) {
+    const sId = cId === 'c-chats' ? 'c-account' : 'e-account';
+    const aId = forceId || parseInt(document.getElementById(sId).value);
+    const ct = document.getElementById(cId);
+    ct.innerHTML = '';
+    document.getElementById(countId).textContent = '0';
+    if (!aId) { ct.innerHTML = '<div class="empty-state" style="padding:24px 16px"><div class="empty-sub">Сначала выберите аккаунт</div></div>'; return; }
+    const acc = getAccounts().find(a => a.id === aId);
+    if (!acc || !acc.chats || !acc.chats.length) { ct.innerHTML = '<div class="empty-state" style="padding:24px 16px"><div class="empty-sub">Нет доступных чатов</div></div>'; return; }
+    const pIds = (pre || []).map(c => typeof c === 'object' ? c.id : c);
+    acc.chats.forEach((ch, i) => {
+        const sel = pIds.includes(ch.id);
+        const d = document.createElement('div');
+        d.className = 'chat-item' + (sel ? ' selected' : '');
+        d.dataset.idx = i;
+        d.dataset.aid = aId;
+        const initial = ch.title.charAt(0).toUpperCase();
+        d.innerHTML = `
+            <div class="chat-avatar">${initial}</div>
+            <div class="chat-info">
+                <div class="chat-title">${esc(ch.title)}</div>
+                <div class="chat-type">${ch.type === 'channel' ? 'Канал' : 'Группа'}</div>
+            </div>
+            <div class="chat-check"></div>`;
+        d.onclick = () => {
+            d.classList.toggle('selected');
+            document.getElementById(countId).textContent = ct.querySelectorAll('.chat-item.selected').length;
+        };
+        ct.appendChild(d);
+    });
+    document.getElementById(countId).textContent = ct.querySelectorAll('.chat-item.selected').length;
+}
+function selectAll(cId, countId) {
+    const ct = document.getElementById(cId);
+    const it = ct.querySelectorAll('.chat-item');
+    if (!it.length) return;
+    const all = ct.querySelectorAll('.chat-item.selected').length === it.length;
+    it.forEach(i => all ? i.classList.remove('selected') : i.classList.add('selected'));
+    document.getElementById(countId).textContent = all ? 0 : it.length;
+}
+function getSel(cId, aId) {
+    const ct = document.getElementById(cId);
+    const acc = getAccounts().find(a => a.id === aId);
+    if (!acc) return [];
+    const r = [];
+    ct.querySelectorAll('.chat-item.selected').forEach(el => {
+        const i = parseInt(el.dataset.idx);
+        if (acc.chats[i]) r.push(acc.chats[i]);
+    });
+    return r;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function setMsg(id, t, tp) { const e = document.getElementById(id); e.textContent = t; e.className = 'msg ' + (tp || ''); }
+</script>
+</body>
+</html>
